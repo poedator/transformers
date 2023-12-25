@@ -125,6 +125,11 @@ class QuantizationConfigMixin:
         """
         return copy.deepcopy(self.__dict__)
 
+    def __iter__(self):
+        """allows `dict(obj)` for situations where obj may be a dict or QuantizationConfigMixin"""
+        for attr, value in copy.deepcopy(self.__dict__).items():
+            yield attr, value
+
     def __repr__(self):
         return f"{self.__class__.__name__} {self.to_json_string()}"
 
