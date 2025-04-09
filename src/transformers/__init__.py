@@ -18,7 +18,7 @@
 # to defer the actual importing for when the objects are requested. This way `import transformers` provides the names
 # in the namespace without actually importing anything (and especially none of the backends).
 
-__version__ = "4.51.0.dev0"
+__version__ = "4.52.0.dev0"
 
 from typing import TYPE_CHECKING
 
@@ -482,6 +482,7 @@ _import_structure = {
         "GitVisionConfig",
     ],
     "models.glm": ["GlmConfig"],
+    "models.glm4": ["Glm4Config"],
     "models.glpn": ["GLPNConfig"],
     "models.got_ocr2": [
         "GotOcr2Config",
@@ -562,6 +563,12 @@ _import_structure = {
     "models.levit": ["LevitConfig"],
     "models.lilt": ["LiltConfig"],
     "models.llama": ["LlamaConfig"],
+    "models.llama4": [
+        "Llama4Config",
+        "Llama4Processor",
+        "Llama4TextConfig",
+        "Llama4VisionConfig",
+    ],
     "models.llava": [
         "LlavaConfig",
         "LlavaProcessor",
@@ -744,6 +751,8 @@ _import_structure = {
         "Qwen2VLConfig",
         "Qwen2VLProcessor",
     ],
+    "models.qwen3": ["Qwen3Config"],
+    "models.qwen3_moe": ["Qwen3MoeConfig"],
     "models.rag": ["RagConfig", "RagRetriever", "RagTokenizer"],
     "models.recurrent_gemma": ["RecurrentGemmaConfig"],
     "models.reformer": ["ReformerConfig"],
@@ -1035,7 +1044,6 @@ _import_structure = {
         "is_torch_musa_available",
         "is_torch_neuroncore_available",
         "is_torch_npu_available",
-        "is_torch_tpu_available",
         "is_torchvision_available",
         "is_torch_xla_available",
         "is_torch_xpu_available",
@@ -1353,6 +1361,7 @@ else:
     _import_structure["models.detr"].append("DetrImageProcessorFast")
     _import_structure["models.gemma3"].append("Gemma3ImageProcessorFast")
     _import_structure["models.got_ocr2"].append("GotOcr2ImageProcessorFast")
+    _import_structure["models.llama4"].append("Llama4ImageProcessorFast")
     _import_structure["models.llava"].append("LlavaImageProcessorFast")
     _import_structure["models.llava_next"].append("LlavaNextImageProcessorFast")
     _import_structure["models.llava_onevision"].append("LlavaOnevisionImageProcessorFast")
@@ -1482,7 +1491,7 @@ else:
 
     _import_structure["modeling_flash_attention_utils"] = []
     _import_structure["modeling_outputs"] = []
-    _import_structure["modeling_rope_utils"] = ["ROPE_INIT_FUNCTIONS"]
+    _import_structure["modeling_rope_utils"] = ["ROPE_INIT_FUNCTIONS", "dynamic_rope_update"]
     _import_structure["modeling_utils"] = ["PreTrainedModel", "AttentionInterface"]
 
     # PyTorch models structure
@@ -2509,6 +2518,24 @@ else:
             "GlmPreTrainedModel",
         ]
     )
+    _import_structure["models.llama4"].extend(
+        [
+            "Llama4ForCausalLM",
+            "Llama4ForConditionalGeneration",
+            "Llama4TextModel",
+            "Llama4VisionModel",
+            "Llama4PreTrainedModel",
+        ]
+    )
+    _import_structure["models.glm4"].extend(
+        [
+            "Glm4ForCausalLM",
+            "Glm4ForSequenceClassification",
+            "Glm4ForTokenClassification",
+            "Glm4Model",
+            "Glm4PreTrainedModel",
+        ]
+    )
     _import_structure["models.glpn"].extend(
         [
             "GLPNForDepthEstimation",
@@ -3441,6 +3468,26 @@ else:
             "Qwen2VLPreTrainedModel",
         ]
     )
+    _import_structure["models.qwen3"].extend(
+        [
+            "Qwen3ForCausalLM",
+            "Qwen3ForQuestionAnswering",
+            "Qwen3ForSequenceClassification",
+            "Qwen3ForTokenClassification",
+            "Qwen3Model",
+            "Qwen3PreTrainedModel",
+        ]
+    )
+    _import_structure["models.qwen3_moe"].extend(
+        [
+            "Qwen3MoeForCausalLM",
+            "Qwen3MoeForQuestionAnswering",
+            "Qwen3MoeForSequenceClassification",
+            "Qwen3MoeForTokenClassification",
+            "Qwen3MoeModel",
+            "Qwen3MoePreTrainedModel",
+        ]
+    )
     _import_structure["models.rag"].extend(
         [
             "RagModel",
@@ -3568,6 +3615,7 @@ else:
         [
             "SamModel",
             "SamPreTrainedModel",
+            "SamVisionModel",
         ]
     )
     _import_structure["models.seamless_m4t"].extend(
@@ -4736,6 +4784,7 @@ else:
         [
             "TFSamModel",
             "TFSamPreTrainedModel",
+            "TFSamVisionModel",
         ]
     )
     _import_structure["models.segformer"].extend(
@@ -5703,6 +5752,7 @@ if TYPE_CHECKING:
         GitVisionConfig,
     )
     from .models.glm import GlmConfig
+    from .models.glm4 import Glm4Config
     from .models.glpn import GLPNConfig
     from .models.got_ocr2 import GotOcr2Config, GotOcr2Processor, GotOcr2VisionConfig
     from .models.gpt2 import (
@@ -5784,6 +5834,12 @@ if TYPE_CHECKING:
     from .models.levit import LevitConfig
     from .models.lilt import LiltConfig
     from .models.llama import LlamaConfig
+    from .models.llama4 import (
+        Llama4Config,
+        Llama4Processor,
+        Llama4TextConfig,
+        Llama4VisionConfig,
+    )
     from .models.llava import (
         LlavaConfig,
         LlavaProcessor,
@@ -5993,6 +6049,8 @@ if TYPE_CHECKING:
         Qwen2VLConfig,
         Qwen2VLProcessor,
     )
+    from .models.qwen3 import Qwen3Config
+    from .models.qwen3_moe import Qwen3MoeConfig
     from .models.rag import RagConfig, RagRetriever, RagTokenizer
     from .models.recurrent_gemma import RecurrentGemmaConfig
     from .models.reformer import ReformerConfig
@@ -6317,7 +6375,6 @@ if TYPE_CHECKING:
         is_torch_musa_available,
         is_torch_neuroncore_available,
         is_torch_npu_available,
-        is_torch_tpu_available,
         is_torch_xla_available,
         is_torch_xpu_available,
         is_torchvision_available,
@@ -6622,6 +6679,7 @@ if TYPE_CHECKING:
         from .models.detr import DetrImageProcessorFast
         from .models.gemma3 import Gemma3ImageProcessorFast
         from .models.got_ocr2 import GotOcr2ImageProcessorFast
+        from .models.llama4 import Llama4ImageProcessorFast
         from .models.llava import LlavaImageProcessorFast
         from .models.llava_next import LlavaNextImageProcessorFast
         from .models.llava_onevision import LlavaOnevisionImageProcessorFast
@@ -6738,7 +6796,7 @@ if TYPE_CHECKING:
             model_addition_debugger,
             model_addition_debugger_context,
         )
-        from .modeling_rope_utils import ROPE_INIT_FUNCTIONS
+        from .modeling_rope_utils import ROPE_INIT_FUNCTIONS, dynamic_rope_update
         from .modeling_utils import AttentionInterface, PreTrainedModel
         from .models.albert import (
             AlbertForMaskedLM,
@@ -7577,6 +7635,13 @@ if TYPE_CHECKING:
             GlmModel,
             GlmPreTrainedModel,
         )
+        from .models.glm4 import (
+            Glm4ForCausalLM,
+            Glm4ForSequenceClassification,
+            Glm4ForTokenClassification,
+            Glm4Model,
+            Glm4PreTrainedModel,
+        )
         from .models.glpn import (
             GLPNForDepthEstimation,
             GLPNModel,
@@ -7802,6 +7867,13 @@ if TYPE_CHECKING:
             LlamaForTokenClassification,
             LlamaModel,
             LlamaPreTrainedModel,
+        )
+        from .models.llama4 import (
+            Llama4ForCausalLM,
+            Llama4ForConditionalGeneration,
+            Llama4PreTrainedModel,
+            Llama4TextModel,
+            Llama4VisionModel,
         )
         from .models.llava import (
             LlavaForConditionalGeneration,
@@ -8293,6 +8365,22 @@ if TYPE_CHECKING:
             Qwen2VLModel,
             Qwen2VLPreTrainedModel,
         )
+        from .models.qwen3 import (
+            Qwen3ForCausalLM,
+            Qwen3ForQuestionAnswering,
+            Qwen3ForSequenceClassification,
+            Qwen3ForTokenClassification,
+            Qwen3Model,
+            Qwen3PreTrainedModel,
+        )
+        from .models.qwen3_moe import (
+            Qwen3MoeForCausalLM,
+            Qwen3MoeForQuestionAnswering,
+            Qwen3MoeForSequenceClassification,
+            Qwen3MoeForTokenClassification,
+            Qwen3MoeModel,
+            Qwen3MoePreTrainedModel,
+        )
         from .models.rag import (
             RagModel,
             RagPreTrainedModel,
@@ -8393,6 +8481,7 @@ if TYPE_CHECKING:
         from .models.sam import (
             SamModel,
             SamPreTrainedModel,
+            SamVisionModel,
         )
         from .models.seamless_m4t import (
             SeamlessM4TCodeHifiGan,
@@ -9334,6 +9423,7 @@ if TYPE_CHECKING:
         from .models.sam import (
             TFSamModel,
             TFSamPreTrainedModel,
+            TFSamVisionModel,
         )
         from .models.segformer import (
             TFSegformerDecodeHead,
